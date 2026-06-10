@@ -6,22 +6,24 @@
 # See the solution video in the 100 Days of Python Course for explainations.
 
 
-from datetime import datetime
-import pandas
+import datetime as dt
+import pandas as pd
 import random
 import smtplib
 import os
+from email.message import EmailMessage
 
 MY_EMAIL = os.environ.get("MY_EMAIL")
 MY_PASSWORD = os.environ.get("MY_PASSWORD")
 
 current_dt = dt.datetime.now()
 
-df = pandas.read_csv("birthdays.csv")
+df = pd.read_csv("birthdays.csv")
 
 # Production Ready Way:
 today_bdays = df[(df["month"] == current_dt.month) & (df["day"] == current_dt.day)]
 if not today_bdays.empty:
+    print(f"🎉 Found {len(today_bdays)} birthday(s) today! Connecting to Gmail...")
     try:
         with smtplib.SMTP("smtp.gmail.com", port=587) as connection:
             connection.starttls()
@@ -38,7 +40,7 @@ if not today_bdays.empty:
 
                 msg = EmailMessage()
                 msg["Subject"] = "HAPPY BIRTHDAY"
-                msg["From"] = my_email
+                msg["From"] = MY_EMAIL
                 msg["To"] = target_mail
                 msg.set_content(letter_content)
 
@@ -46,3 +48,5 @@ if not today_bdays.empty:
                 print(f"Birthday email sent to {name} at {target_mail}")
     except Exception as e:
         print(f"Network or SMTP error occurred: {e}")
+else:
+    print("No birthdays today")
