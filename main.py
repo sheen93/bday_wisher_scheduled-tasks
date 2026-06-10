@@ -12,8 +12,8 @@ import random
 import smtplib
 import os
 
-my_email = os.environ.get("MY_EMAIL")
-password = os.environ.get("MY_PASSWORD")
+MY_EMAIL = os.environ.get("MY_EMAIL")
+MY_PASSWORD = os.environ.get("MY_PASSWORD")
 
 current_dt = dt.datetime.now()
 
@@ -25,7 +25,7 @@ if not today_bdays.empty:
     try:
         with smtplib.SMTP("smtp.gmail.com", port=587) as connection:
             connection.starttls()
-            connection.login(user=my_email, password=password)
+            connection.login(user=MY_EMAIL, password=MY_PASSWORD)
 
             for index, bday_person in today_bdays.iterrows():
                 name = bday_person["name"]
